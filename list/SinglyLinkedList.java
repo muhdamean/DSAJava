@@ -1,4 +1,9 @@
 package list;
+
+import java.security.DrbgParameters.Reseed;
+
+import javax.naming.spi.DirStateFactory.Result;
+
 public class SinglyLinkedList{
     private ListNode head;
 
@@ -247,24 +252,152 @@ public class SinglyLinkedList{
         if(current==null) return;
         temp.next=current.next;
     }
-    public static void main(String[] args) {
-        SinglyLinkedList sll= new SinglyLinkedList();
-        sll.insertAtBegining(6);
-        sll.insertAtBegining(4);
-        sll.insertAtBegining(2);
-        sll.insertAtBegining(2);
-        sll.insertAtBegining(1);
 
-
-        ListNode head=new ListNode(8);
-        ListNode second=new ListNode(6);
+    //detect loop in list
+    public boolean containsLoop(){
+        ListNode fastPtr=head;
+        ListNode slowPtr=head;
+        while(fastPtr!=null && fastPtr.next!=null){
+            fastPtr=fastPtr.next.next;
+            slowPtr=slowPtr.next;
+            if(slowPtr==fastPtr){
+                return true;
+            }
+        }
+        return false;
+    }
+    //create a loop
+    public void createALoopInLinkedList(){
+        ListNode first=new ListNode(1);
+        ListNode second=new ListNode(2);
         ListNode third=new ListNode(3);
-        ListNode fourth=new ListNode(11);
+        ListNode fourth=new ListNode(4);
+        ListNode fifth=new ListNode(5);
+        ListNode sixth=new ListNode(6);
 
-        head.next=second;
+        head=first;
+        first.next=second;
         second.next=third;
         third.next=fourth;
-        fourth.next=null;
+        fourth.next=fifth;
+        fifth.next=sixth;
+        sixth.next=third;
+    }
+    public ListNode startOfLoop(){
+        ListNode fastPtr=head;
+        ListNode slowPtr=head;
+        while(fastPtr!=null && fastPtr.next!=null){
+            fastPtr=fastPtr.next.next;
+            slowPtr=slowPtr.next;
+            if(slowPtr==fastPtr){
+                return slowPtr;
+            }
+        }
+        return slowPtr;
+    }
+    public ListNode getStartingNode(ListNode slowPtr){
+        ListNode temp=head;
+        while(slowPtr!=temp){
+            temp=temp.next;
+            slowPtr=slowPtr.next;
+        }
+        return temp;
+    }
+    //get start of a loop
+     //detect loop in list
+     public ListNode startNodeInALoop(){
+        ListNode fastPtr=head;
+        ListNode slowPtr=head;
+        while(fastPtr!=null && fastPtr.next!=null){
+            fastPtr=fastPtr.next.next;
+            slowPtr=slowPtr.next;
+            if(slowPtr==fastPtr){
+                return getStartingNode(slowPtr);
+            }
+        }
+        return null;
+    }
+    //remove loop from list
+    public ListNode removeLoop(){
+        ListNode fastPtr=head;
+        ListNode slowPtr=head;
+        while(fastPtr!=null && fastPtr.next!=null){
+            fastPtr=fastPtr.next.next;
+            slowPtr=slowPtr.next;
+            if(slowPtr==fastPtr){
+                removeLoop(slowPtr);
+            }
+        }
+        return slowPtr;
+    }
+    //remove detected node from loop
+    private void removeLoop(ListNode slowPtr){
+        ListNode temp=head;
+        while(slowPtr.next!=temp.next){
+            temp=temp.next;
+            slowPtr=slowPtr.next;
+        }
+        slowPtr.next= null;
+    }
+    //merge two list
+    public static ListNode merge(ListNode a, ListNode b){
+        ListNode dummy=new ListNode(0);
+        ListNode tail=dummy;
+        while(a!=null && b!=null){
+            if(a.data<=b.data){
+                tail.next=a;
+                a=a.next;
+            }else{
+                tail.next=b;
+                b=b.next;
+            }
+            tail=tail.next;
+        }
+
+        if(a==null){
+            tail.next=b;
+        }else{
+            tail.next=a;
+        }
+        return dummy.next;
+    }
+    //add two list
+    public static ListNode add(ListNode a, ListNode b){
+        ListNode dummy=new ListNode(0);
+        ListNode tail=dummy;
+        int carry=0;
+        while(a!=null && b!=null) {
+            int x=(a!=null) ? a.data :0;
+            int y=(a!=null) ? b.data :0;
+            int sum=carry+x+y;
+            tail.next=new ListNode(sum % 10);
+            tail=tail.next;
+            if(a!=null) a=a.next;
+            if(b!=null) b=b.next;
+        }
+        if(carry>0){
+            tail.next=new ListNode(carry);
+        }
+        return dummy.next;
+    }
+    public static void main(String[] args) {
+        SinglyLinkedList sll= new SinglyLinkedList();
+        // sll.insertAtBegining(6);
+        // sll.insertAtBegining(4);
+        // sll.insertAtBegining(2);
+        // sll.insertAtBegining(2);
+        // sll.insertAtBegining(1);
+
+
+        // ListNode head=new ListNode(8);
+        // ListNode second=new ListNode(6);
+        // ListNode third=new ListNode(3);
+        // ListNode fourth=new ListNode(11);
+
+        // head.next=second;
+        // second.next=third;
+        // third.next=fourth;
+        // fourth.next=null;
 
         // sll.insertFirst(2); //insert at position 1
         // sll.insertLast(7);
@@ -295,8 +428,40 @@ public class SinglyLinkedList{
         // sll.printLinkedList();
 
         //delete node
-        sll.deleteNode(4);
-        sll.printLinkedList();
+        //sll.deleteNode(4);
+        //sll.printLinkedList();
+
+        //contains loop
+        // sll.createALoopInLinkedList();
+        // System.out.println(sll.containsLoop());
+        // System.out.println(sll.startNodeInALoop().data);
+        // sll.removeLoop();
+        // sll.printLinkedList();
+
+        //merge two list
+        sll.insertLast(1);
+        sll.insertLast(4);
+        sll.insertLast(8);
+
+        SinglyLinkedList sll2=new SinglyLinkedList();
+        sll2.insertLast(3);
+        sll2.insertLast(5);
+        sll2.insertLast(6);
+        sll2.insertLast(9);
+        sll2.insertLast(14);
+        sll2.insertLast(18);
+
+        // sll.printLinkedList();
+        // sll2.printLinkedList();
+
+        SinglyLinkedList result=new SinglyLinkedList();
+        // result.head=merge(sll.head, sll2.head);
+        // result.printLinkedList();
+
+        //add two list
+        result.head=add(sll.head, sll2.head);
+        result.printLinkedList();
+
         //search list
         // if(sll.find(head, 2)){
         //     System.out.println("Search key found !!!");
