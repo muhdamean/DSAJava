@@ -1,9 +1,5 @@
 package list;
 
-import java.security.DrbgParameters.Reseed;
-
-import javax.naming.spi.DirStateFactory.Result;
-
 public class SinglyLinkedList{
     private ListNode head;
 
