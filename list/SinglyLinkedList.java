@@ -283,6 +283,8 @@ public class SinglyLinkedList{
         fifth.next=sixth;
         sixth.next=third;
     }
+    
+    //get start of a loop
     public ListNode startOfLoop(){
         ListNode fastPtr=head;
         ListNode slowPtr=head;
