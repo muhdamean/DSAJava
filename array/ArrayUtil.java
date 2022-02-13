@@ -82,24 +82,19 @@ public class ArrayUtil {
         return secondMax;
     }
 
-    //move zeroes to end of array
-    public static void moveZeros(int[] arr, int n){
-        int j=0;
-        for(int i=0; i<n; i++){
-            if(arr[i]!=0 && arr[j]==0){
-                int temp=arr[i];
-                arr[i]=arr[j];
-                arr[j]=temp;
-            }
-            if(arr[j]!=0){
-                j++;
-            }
+    //resize array
+    public static int[] resize(int[] arr, int capacity){
+        int[] temp=new int[capacity];
+        for(int i=0; i<arr.length; i++){
+            temp[i]=arr[i];
         }
+        arr=temp;
+        return arr;
     }
-
     public static void main(String[] args) {
         int[] arr={3,2,4,7,0,6,5};
 
+        System.out.println("Original Array");
         printArray(arr);
         //int[] newArr=removeEven(arr);
         //printArray(newArr);
@@ -111,11 +106,14 @@ public class ArrayUtil {
         //printArray(newArray);
         
         int minValue=findMinimun(arr);
-        System.out.println(minValue);
+        System.out.println("Minimum value in array: "+minValue);
 
-        System.out.println(findSecondMax(arr));
+        System.out.println("Second Maximum value in array: "+findSecondMax(arr));
 
-        moveZeros(arr, arr.length);
-        printArray(arr);
+        System.out.println("Array after resize");
+        int[] resizeArray=resize(arr, 9);
+        printArray(resizeArray);
+        System.out.println("Size of array before: "+arr.length+"  Size after resize: "+resizeArray.length);
+
     }
 }
